@@ -1,7 +1,7 @@
 const axios = require("axios");
 test('Load balancing distributes requests evenly', async () => {
   // Simulate multiple concurrent requests
-  const requests = Array(10000).fill().map(() => axios.post('http://192.168.1.2:3000/user/login'));
+  const requests = Array(10000).fill().map(() => axios.post('http://192.168.10.7:5000/user/login'));
 
   // Wait for all requests to complete
   const responses = await Promise.all(requests);
