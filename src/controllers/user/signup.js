@@ -1,50 +1,87 @@
 const register = require("../../models/Register");
-const jwt  = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const bcryptjs = require("bcrypt");
 const signup = async (req, res) => {
-  console.log("signup called")
-  let path = "";
-  let createObj = {}
-  if (req.body.location){
+  console.log("signup called");
 
-    let parsedLocation = JSON.parse(req.body.location);
-    createObj.location = parsedLocation
-  }
-  if (req.file === undefined) {
-    path = "no-profile-picture-placeholder.png";
-  } else {
-    path = req.file.filename;
-  }
-  const newuser = new register({
-    email: "",
-    phoneNumber: req.body.phoneNumber,
-    fullName: req.body.fullName,
-    type: req.body.type,
-    expoPushToken:"",
-    //this picture shall be retrieve by sending network request to {HOSTNAME/images/:profile}
-    profile: path, //saving the name of the file to the database
-    ...createObj
-  });
-  const phoneExist = await register.findOne({
-    phoneNumber: newuser.phoneNumber,
-  });
-  if (phoneExist !== null) {
-    console.log(phoneExist);
-    return res.status(400).send({
-      statusCode: 400,
-      message: "Phone Number Already Exists",
-    });
-  }
   try {
-    console.log("inside try")
-    const User = await newuser.save();
-    //copy the login logic here
-    const token = jwt.sign({ _id: User.id }, process.env.TOKEN_SECRET);
-    console.log("sending this back")
-    res.header("auth_token", token).send(User);
-  } catch (err) {
-    console.log("inside catch error is " , err)
-    res.status(400).json({ message: err, status: 400 });
+    // Check if the email and phone number already exist in the database
+    const emailExist = await register.findOne({ email: req.body.email });
+    const phoneExist = await register.findOne({ phoneNumber: req.body.phoneNumber });
+
+    if (emailExist) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: "Email already exists",
+      });
+    }
+
+    if (phoneExist) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: "Phone number already exists",
+      });
+    }
+
+    const hashedPassword = await bcryptjs.hash(req.body.password, 8);
+    // Create a new user based on the schema
+    const newUser = new register({
+      name: req.body.name,
+      email: req.body.email,
+      password: hashedPassword,
+      phoneNumber: req.body.phoneNumber,
+    });
+
+    // Save the new user to the database
+    const savedUser = await newUser.save();
+
+    // Generate a JWT token for the user
+    const token = jwt.sign({ _id: savedUser._id }, process.env.TOKEN_SECRET);
+
+    console.log("User registered successfully");
+
+    // Return the token and user data as a response
+    res.header("auth_token", token).json({
+      token,
+      user: {
+        _id: savedUser._id,
+        name: savedUser.name,
+        email: savedUser.email,
+        phoneNumber: savedUser.phoneNumber,
+      },
+    });
+  } catch (error) {
+    console.error("Error during registration:", error);
+    res.status(400).json({ message: "Registration failed", status: 400 });
   }
 };
 
 module.exports = signup;
+
+
+// authrouter.post("/api/signup", async (req, res) => {
+//   try {
+//       const { name, email, password, fcm_token } = req.body;
+
+//       const existingUser = await User.findOne({ email });
+//       if (existingUser) {
+//           return res
+//               .status(400)
+//               .json({ msg: "User with same email already exists!" });
+//       }
+
+//       const hashedPassword = await bcryptjs.hash(password, 8);
+
+//       let user = new User({
+//           email,
+//           password: hashedPassword,
+//           name,
+//           fcm_token
+//       });
+//       user = await user.save();
+//       res.json(user);
+//   } catch (e) {
+//       res.status(500).json({ error: e.message });
+//   }
+// });
+// const bcryptjs = require("bcrypt");

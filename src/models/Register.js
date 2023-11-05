@@ -1,59 +1,31 @@
 const mongoose = require("mongoose");
 
 const dbSchema = new mongoose.Schema({
-  email: {
+  name: {
     type: String,
-    required: false,
-    min: 6,
-    max: 255,
-  },
-  phoneNumber: {
+    required: true
+},
+email: {
     type: String,
+    trim: true,
     required: true,
-    min: 6,
-    max: 255,
-    unique: true,
-  },
-  fullName: {
+    validate: {
+        validator: (value) => {
+            const re = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
+
+            return value.match(re);
+        },
+        message: "please enter correect email",
+    }
+},
+password: {
     type: String,
-    required: true,
-  },
-  type: {
+    required: true
+},
+phoneNumber: {
     type: String,
-    required: true,
-  },
-  profile: {
-    type: String,
-    required: true,
-  },
-  followers: {
-    type: Array,
-    required: true,
-  },
-  points: {
-    type: Number,
-    default: 0,
-  },
-  following: {
-    type: Array,
-    required: true,
-  },
-  blockedUsers: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "NewUsers",
-    },
-  ],
-  blockedByUsers: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "NewUsers",
-    },
-  ],
-  location: {},
-  expoPushToken: {
-    type: String,
-  },
+    required: true
+}
 });
 
 const NewUsers = new mongoose.model("NewUsers", dbSchema);
