@@ -9,14 +9,14 @@ email: {
     type: String,
     trim: true,
     required: true,
-    validate: {
-        validator: (value) => {
-            const re = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
+    // validate: {
+    //     validator: (value) => {
+    //         const re = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
 
-            return value.match(re);
-        },
-        message: "please enter correect email",
-    }
+    //         return value.match(re);
+    //     },
+    //     message: "please enter correect email",
+    // }
 },
 password: {
     type: String,
