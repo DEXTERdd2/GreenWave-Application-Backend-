@@ -17,7 +17,6 @@ const updatepost = async (req, res) => {
           fullName: 1,
           phoneNumber: 1,
           profile: 1,
-          type: 1,
           followers: 1,
           following: 1,
           expoPushToken: 1,
@@ -26,12 +25,12 @@ const updatepost = async (req, res) => {
           path: "comments",
           populate: {
             path: "commented_by",
-            select: "profile fullName phoneNumber type",
+            select: "profile fullName phoneNumber ",
           },
         })
         .populate({
           path: "reactions",
-          select: "profile fullName phoneNumber type",
+          select: "profile fullName phoneNumber",
           model: "NewUsers",
         });
 

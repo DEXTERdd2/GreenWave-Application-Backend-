@@ -3,11 +3,13 @@ const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcrypt");
 const signup = async (req, res) => {
   console.log("signup called");
-
+  let path = "no-profile-picture-placeholder.png";
   try {
     // Check if the email and phone number already exist in the database
     const emailExist = await register.findOne({ email: req.body.email });
-    const phoneExist = await register.findOne({ phoneNumber: req.body.phoneNumber });
+    const phoneExist = await register.findOne({
+      phoneNumber: req.body.phoneNumber,
+    });
 
     if (emailExist) {
       return res.status(400).json({
@@ -26,10 +28,11 @@ const signup = async (req, res) => {
     const hashedPassword = await bcryptjs.hash(req.body.password, 8);
     // Create a new user based on the schema
     const newUser = new register({
-      name: req.body.name,
+      fullName: req.body.fullName,
       email: req.body.email,
       password: hashedPassword,
       phoneNumber: req.body.phoneNumber,
+      profile: path,
     });
 
     // Save the new user to the database
@@ -38,18 +41,11 @@ const signup = async (req, res) => {
     // Generate a JWT token for the user
     const token = jwt.sign({ _id: savedUser._id }, process.env.TOKEN_SECRET);
 
+    console.log(savedUser);
     console.log("User registered successfully");
 
     // Return the token and user data as a response
-    res.header("auth_token", token).json({
-      token,
-      user: {
-        _id: savedUser._id,
-        name: savedUser.name,
-        email: savedUser.email,
-        phoneNumber: savedUser.phoneNumber,
-      },
-    });
+    res.header("auth_token", token).send(savedUser);
   } catch (error) {
     console.error("Error during registration:", error);
     res.status(400).json({ message: "Registration failed", status: 400 });
@@ -57,7 +53,6 @@ const signup = async (req, res) => {
 };
 
 module.exports = signup;
-
 
 // authrouter.post("/api/signup", async (req, res) => {
 //   try {

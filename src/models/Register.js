@@ -1,34 +1,31 @@
 const mongoose = require("mongoose");
 
 const dbSchema = new mongoose.Schema({
-  name: {
+  email: {
     type: String,
-    required: true
-},
-email: {
+    required: false,
+    min: 6,
+    max: 255,
+  },
+  phoneNumber: {
     type: String,
-    trim: true,
     required: true,
-    // validate: {
-    //     validator: (value) => {
-    //         const re = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
-
-    //         return value.match(re);
-    //     },
-    //     message: "please enter correect email",
-    // }
-},
-password: {
+    min: 6,
+    max: 255,
+    unique: true,
+  },
+  fullName: {
     type: String,
-    required: true
-},
-phoneNumber: {
+    required: true,
+  },
+  type: {
     type: String,
-    required: true
-},
-followers: {
+  },
+  profile: {
+    type: String,
+  },
+  followers: {
     type: Array,
-    required: true,
   },
   points: {
     type: Number,
@@ -36,7 +33,6 @@ followers: {
   },
   following: {
     type: Array,
-    required: true,
   },
   blockedUsers: [
     {
@@ -53,6 +49,10 @@ followers: {
   location: {},
   expoPushToken: {
     type: String,
+  },
+  password: {
+    type: String,
+    required: true,
   },
 });
 

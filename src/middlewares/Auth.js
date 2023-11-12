@@ -7,15 +7,13 @@ module.exports = function (req, res, next) {
   }
   try {
     const verification = jwt.verify(token, process.env.TOKEN_SECRET);
-    req.user = verification.id;
+    req.user = verification;
     req.token = token;
     next();
   } catch (err) {
     return res.status(400).send("Invalid Token");
   }
 };
-
-
 
 // const jwt = require("jsonwebtoken");
 

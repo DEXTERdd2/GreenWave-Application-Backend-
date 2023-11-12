@@ -8,10 +8,8 @@ exports.getPosts = async (req, res) => {
       fullName: 1,
       phoneNumber: 1,
       profile: 1,
-      type: 1,
       followers: 1,
       following: 1,
-      expoPushToken: 1,
     })
     .populate({
       path: "comments",
@@ -38,6 +36,7 @@ exports.getPosts = async (req, res) => {
 };
 
 exports.postsExperiment = async (req, res) => {
+
   try {
     let user = await Users.findById(req.user._id);
     const blockedUserIds = [...user.blockedUsers, ...user.blockedByUsers];
