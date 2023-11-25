@@ -15,7 +15,8 @@ exports.createCampaign = async (req, res, next) => {
     volunteers,
     color,
     location,
-    venue
+    venue,
+    requiredFunds,
   } = req.body;
 
   const session = await mongoose.startSession();
@@ -50,7 +51,9 @@ exports.createCampaign = async (req, res, next) => {
           volunteers,
           color,
           location,
-          venue
+          venue,
+          requiredFunds,
+          createFund: 0,
         },
       ],
       { session }

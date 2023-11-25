@@ -11,11 +11,11 @@ const campaignsSchema = new Schema({
   },
   startTime: {
     type: Date,
-    required: true,
+    // required: true,
   },
   endTime: {
     type: Date,
-    required: true,
+    // required: true,
   },
   radius: {
     type: String,
@@ -27,7 +27,7 @@ const campaignsSchema = new Schema({
   },
   searchTag: {
     type: String,
-    required: true,
+    // required: true,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -37,7 +37,7 @@ const campaignsSchema = new Schema({
   status: {
     type: String,
     enum: ["planning", "created", "executed", "archived"],
-    default: "planning",
+    default: "executed",
   },
 
   teamA: {
@@ -96,13 +96,20 @@ const campaignsSchema = new Schema({
   group: {
     type: Schema.Types.ObjectId,
     ref: "groups",
-    required: true,
+    // required: true,
   },
   color: {
     type: String,
   },
   venue: {
     type: String,
+  },
+  requiredFunds: {
+    type: String,
+  },
+  createFund: {
+    type: Number,
+    ref: "NewUsers",
   },
 });
 

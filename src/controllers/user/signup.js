@@ -33,6 +33,8 @@ const signup = async (req, res) => {
       password: hashedPassword,
       phoneNumber: req.body.phoneNumber,
       profile: path,
+      type: "user",
+      location: req.body.location,
     });
 
     // Save the new user to the database

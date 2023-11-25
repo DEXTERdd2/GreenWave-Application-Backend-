@@ -1,5 +1,5 @@
 const express = require("express");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 //admin-ui setup
 const { instrument } = require("@socket.io/admin-ui");
 
@@ -57,8 +57,14 @@ const { updatePoints } = require("./src/services/updateCampaignPoints");
 //server configuration
 const app = express();
 app.use(express.json());
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
 app.use(cors());
 const server = http.createServer(app);
 const client = new Server(server, {
@@ -84,20 +90,20 @@ app.use("/messageMedia", express.static("uploads/messageMedia"));
 //traditional crud
 app.use("/user", authroutes);
 app.use("/posts", postroutes);
-app.use("/today", todayroutes);
-app.use("/notify", notification);
+// app.use("/today", todayroutes);
+// app.use("/notify", notification);
 app.use("/chat", chats);
-app.use("/groups", groups);
-app.use("/temporary", TEMPORARY_ROUTES);
-app.use("/sms", invitesms);
-app.use("/upgradeRequests", upgradeRequest);
+// app.use("/groups", groups);
+// app.use("/temporary", TEMPORARY_ROUTES);
+// app.use("/sms", invitesms);
+// app.use("/upgradeRequests", upgradeRequest);
 app.use("/archives", archives);
-app.use("/story", storyroutes);
-app.use("/product", productRoutes);
-app.use("/order", orderRoutes);
+// app.use("/story", storyroutes);
+// app.use("/product", productRoutes);
+// app.use("/order", orderRoutes);
 app.use("/campaigns", campaignsRoutes);
-app.use("/task", taskRoutes);
-app.use("/buckets", bucketRoutes);
+// app.use("/task", taskRoutes);
+// app.use("/buckets", bucketRoutes);
 
 client.use(socketauth);
 //socket apis
@@ -139,7 +145,6 @@ client.on("connection", (socket) => {
       console.log("error inside send_message notification:::", error);
     }
     const result = await sendmessageCN(data);
-    console.log(result.messages[result.messages.length - 1]);
     client
       .to(data.chat)
       .emit("receive_message", result.messages[result.messages.length - 1]);
@@ -224,6 +229,6 @@ client.of("/CN").on("connection", (socket) => {
 instrument(client, {
   auth: false,
 });
-server.listen (5000, ()=>{
-    console.log("Server is running on port 5000")
+server.listen(5000, () => {
+  console.log("Server is running on port 5000");
 });
