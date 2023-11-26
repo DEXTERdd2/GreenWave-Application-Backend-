@@ -29,7 +29,7 @@ router.post("/create", verify, createCampaign);
 router.get("/get-by-query", verify, getByQuery);
 router.get("/get-multiple-by-query", verify, getMultipleByQuery);
 router.patch("/invite-volunteer/:campaignId", verify, inviteVolunteer);
-// router.patch("/invite-response/:campaignId", verify, invitesResponse);
+router.patch("/invite-response/:campaignId", verify, invitesResponse);
 // router.patch("/add-volunteer/:campaignId", verify, addVolunteerToTeam);
 // router.patch("/remove-volunteer/:campaignId", verify, removeVolunteerFromTeam);
 // router.post("/add-task/:campaignId", verify, createTask);

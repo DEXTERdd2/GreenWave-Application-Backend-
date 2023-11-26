@@ -24,7 +24,7 @@ const orderRoutes = require("./src/routes/orderRoutes");
 const campaignsRoutes = require("./src/routes/campaignRoutes");
 const taskRoutes = require("./src/routes/tasksRoutes");
 const bucketRoutes = require("./src/routes/bucketRoutes");
-
+const campaignDonation = require("./src/routes/CampaignDonation");
 //sockets
 const disconnect = require("./src/sockets/disconnect");
 //Services
@@ -91,8 +91,9 @@ app.use("/messageMedia", express.static("uploads/messageMedia"));
 app.use("/user", authroutes);
 app.use("/posts", postroutes);
 // app.use("/today", todayroutes);
-// app.use("/notify", notification);
+app.use("/notify", notification);
 app.use("/chat", chats);
+app.use("/donation", campaignDonation);
 // app.use("/groups", groups);
 // app.use("/temporary", TEMPORARY_ROUTES);
 // app.use("/sms", invitesms);
