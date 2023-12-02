@@ -8,19 +8,17 @@ exports.addArchivePost = async (req, res) => {
       return res.json({ success: false, message: "invalid id " });
     }
 
-    //find post
+    // Find post
     let archive = await Posts.findById(req.params.id);
 
-    //check if user is actually archiving his own posts
-    if (user.toString() !== archive.postedby.toString()) {
-      return res.status(401).json({ success: false, message: "not allowed" });
-    }
-
+    // Create an archive entry for the post
     let archivePost = await Archives.create({
       user,
       type: "post",
       data: archive,
     });
+
+    // Delete the post
     await Posts.findByIdAndDelete(archive._id);
 
     return res.json({ success: true, message: "archived successfully" });

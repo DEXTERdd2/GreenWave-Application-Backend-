@@ -1,5 +1,6 @@
 const CampaignModel = require("../../models/campaignsSchema");
 exports.update = async (req, res) => {
+  console.log(req?.body);
   if (!req.params.campaignId) {
     res.status(400).send("Invalid id");
   } else {
